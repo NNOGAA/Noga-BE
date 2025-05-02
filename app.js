@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 
 // ROUTE
-// var indexRouter = require('./routes/index');
+var imageRouter = require('./routes/image');
 
 var app = express();
 
@@ -14,7 +14,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // ROUTER
-// app.use('/users', usersRouter);
+app.use('/api/image', imageRouter);
+
+// UPLOAD
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
