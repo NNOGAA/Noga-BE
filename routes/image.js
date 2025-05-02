@@ -94,4 +94,47 @@ router.post(
     }
 );
 
+
+// NO LABEL OCR
+router.post(
+    "/prepared-food",
+    (req, res, next) => {
+        next();
+    },
+    upload.fields([
+        {name: "foods", maxCount: 1},
+    ]),
+    async function (req, res) {
+        try {
+
+            const uploadedFiles = req.files;
+            const host = req.protocol + "://" + req.get("host");
+
+            if (!uploadedFiles || !uploadedFiles.foods) {
+                return res.status(400).send({
+                    status: 400,
+                    message: "No files uploaded",
+                });
+            }
+
+            const result = {
+                foods: uploadedFiles.foods
+                    ? `${host}/${uploadedFiles.foods[0].path.replace(/\\/g, "/")}`
+                    : null,
+                sessionid: req.body.sessionid
+            };
+
+            return res.status(200).json(result);
+
+        } catch (error) {
+            console.error("Server error:", error);
+            res.status(500).send({
+                status: 500,
+                message: "Error processing upload",
+                error: error.message,
+            });
+        }
+    }
+);
+
 module.exports = router;
