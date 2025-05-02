@@ -11,6 +11,7 @@ const path = require("path");
 
 // FUNCTION
 const {generateRandomText} = require("../function/function");
+const UploadImage = require('../controller/image');
 
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
@@ -24,7 +25,7 @@ const storage = multer.diskStorage({
         const typePath = path.join(basePath, file.fieldname);
 
         if (!fs.existsSync(typePath)) {
-            fs.mkdirSync(typePath, { recursive: true });
+            fs.mkdirSync(typePath, {recursive: true});
         }
 
         cb(null, typePath);
@@ -61,27 +62,7 @@ router.post(
     async function (req, res) {
         try {
 
-            const uploadedFiles = req.files;
-            const host = req.protocol + "://" + req.get("host");
-
-            if (!uploadedFiles || (!uploadedFiles.composition && !uploadedFiles.nutrition_info)) {
-                return res.status(400).send({
-                    status: 400,
-                    message: "No files uploaded",
-                });
-            }
-
-            const result = {
-                composition: uploadedFiles.composition
-                    ? `${host}/${uploadedFiles.composition[0].path.replace(/\\/g, "/")}`
-                    : null,
-                nutrition_info: uploadedFiles.nutrition_info
-                    ? `${host}/${uploadedFiles.nutrition_info[0].path.replace(/\\/g, "/")}`
-                    : null,
-                sessionid: req.body.sessionid
-            };
-
-            return res.status(200).json(result);
+            UploadImage.label_ocr(res, req, req.body)
 
         } catch (error) {
             console.error("Server error:", error);
@@ -107,24 +88,7 @@ router.post(
     async function (req, res) {
         try {
 
-            const uploadedFiles = req.files;
-            const host = req.protocol + "://" + req.get("host");
-
-            if (!uploadedFiles || !uploadedFiles.foods) {
-                return res.status(400).send({
-                    status: 400,
-                    message: "No files uploaded",
-                });
-            }
-
-            const result = {
-                foods: uploadedFiles.foods
-                    ? `${host}/${uploadedFiles.foods[0].path.replace(/\\/g, "/")}`
-                    : null,
-                sessionid: req.body.sessionid
-            };
-
-            return res.status(200).json(result);
+            UploadImage.no_label_ocr(res, req, req.body)
 
         } catch (error) {
             console.error("Server error:", error);
