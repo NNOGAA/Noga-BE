@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ocr_table {
+  sessionid             String    @id @unique
+  status                String?
+  ingredients           String?   @db.Text
+  nutrition_info        String?   @db.Text
+}

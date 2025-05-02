@@ -1,3 +1,7 @@
+// PRISMA
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
 const Upload = {
     label_ocr: async (res, req, data) => {
         const uploadedFiles = req.files;
@@ -20,7 +24,9 @@ const Upload = {
             sessionid: req.body.sessionid
         };
 
-        return res.status(200).json(result);
+        const users = await prisma.ocr_table.findMany();
+
+        return res.status(200).json(users);
     },
     no_label_ocr: async (res, req, data) => {
         const uploadedFiles = req.files;
