@@ -7,6 +7,9 @@ RUN apt-get update -y && apt-get install -y openssl
 # Set working directory
 WORKDIR /app
 
+# Set Prisma environment variable to ignore checksum errors
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+
 # Copy package files
 COPY package*.json ./
 COPY prisma ./prisma/
@@ -17,11 +20,8 @@ RUN npm ci --omit=dev
 # Copy application code
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
-
 # Expose port
 EXPOSE 3000
 
-# Start application
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node app.js"]
+# Generate Prisma client and start application
+CMD ["sh", "-c", "npx prisma generate && npx prisma db push --accept-data-loss && node app.js"]
