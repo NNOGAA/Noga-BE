@@ -101,4 +101,18 @@ router.post(
     }
 );
 
+// GET DATA INFORMATION (Check OCR Results)
+router.post("/data-information", async function (req, res) {
+    try {
+        UploadImage.get_data_information(res, req, req.body);
+    } catch (error) {
+        console.error("Server error:", error);
+        res.status(500).send({
+            status: "error",
+            message: "Error fetching data",
+            error: error.message,
+        });
+    }
+});
+
 module.exports = router;
