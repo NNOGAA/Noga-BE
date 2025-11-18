@@ -15,6 +15,10 @@
 
 CLAUDE.md
 
+# uploads
+/uploads/*
+!/uploads/.gitkeep
+
 # misc
 .DS_Store
 .env.local
