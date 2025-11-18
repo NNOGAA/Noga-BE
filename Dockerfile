@@ -1,5 +1,8 @@
-# Use Node.js LTS version
-FROM node:18-alpine
+# Use Node.js LTS version (Debian-based for better Prisma compatibility)
+FROM node:20-slim
+
+# Install OpenSSL (required by Prisma)
+RUN apt-get update -y && apt-get install -y openssl
 
 # Set working directory
 WORKDIR /app
@@ -8,8 +11,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (use --omit=dev instead of --only=production)
+RUN npm ci --omit=dev
 
 # Copy application code
 COPY . .
