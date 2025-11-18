@@ -7,12 +7,7 @@ const Upload = {
         const uploadedFiles = req.files;
         const host = req.protocol + "://" + req.get("host");
 
-        console.log('=== PACKAGED FOOD UPLOAD ===');
-        console.log('Files:', uploadedFiles);
-        console.log('SessionID:', req.body.sessionid);
-
         if (!uploadedFiles || (!uploadedFiles.composition && !uploadedFiles.nutrition_info)) {
-            console.log('ERROR: No files uploaded');
             return res.status(400).send({
                 status: 400,
                 message: "No files uploaded",
@@ -29,19 +24,13 @@ const Upload = {
             sessionid: req.body.sessionid
         };
 
-        console.log('Result:', result);
         return res.status(200).json(result);
     },
     no_label_ocr: async (res, req, data) => {
         const uploadedFiles = req.files;
         const host = req.protocol + "://" + req.get("host");
 
-        console.log('=== PREPARED FOOD UPLOAD ===');
-        console.log('Files:', uploadedFiles);
-        console.log('SessionID:', req.body.sessionid);
-
         if (!uploadedFiles || !uploadedFiles.foods) {
-            console.log('ERROR: No files uploaded');
             return res.status(400).send({
                 status: 400,
                 message: "No files uploaded",
@@ -55,7 +44,6 @@ const Upload = {
             sessionid: req.body.sessionid
         };
 
-        console.log('Result:', result);
         return res.status(200).json(result);
     }
 }
