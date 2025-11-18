@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node app.js",
     "dev": "npm run db:push && npm start",
     "db:push": "npx prisma generate && npx prisma db push",
     "db:migrate": "npx prisma migrate deploy",
